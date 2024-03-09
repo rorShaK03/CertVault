@@ -8,5 +8,5 @@ users:
     sudo: ALL=(ALL) NOPASSWD:ALL
     shell: /bin/bash
     ssh_authorized_keys:
-      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIObT9OE5KuS18e1owTtIrWXrRd7v3pxgp18Ms3AJhU5y shabad-kirill@i112073094
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIObT9OE5KuS18e1owTtIrWXrRd7v3pxgp18Ms3AJhU5y admin@i112073094
 runcmd: []

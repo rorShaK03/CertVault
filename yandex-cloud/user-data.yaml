@@ -1,12 +1,12 @@
 #cloud-config
 datasource:
-Ec2:
-  strict_id: false
+  Ec2:
+    strict_id: false
 ssh_pwauth: no
 users:
-  - name: {{ env.YC_VM_USERNAME }}
-    groups: sudo
+  - name: admin
+    sudo: ALL=(ALL) NOPASSWD:ALL
     shell: /bin/bash
-    sudo: [ 'ALL=(ALL) NOPASSWD:ALL' ]
-    ssh-authorized-keys:
-      - {{ env.YC_VM_SSH }}
+    ssh_authorized_keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIObT9OE5KuS18e1owTtIrWXrRd7v3pxgp18Ms3AJhU5y shabad-kirill@i112073094
+runcmd: []

@@ -1,0 +1,32 @@
+folder_id: b1gjv0b32v4u9djo3bio
+name: certvault-ig
+instance_template:
+  platform_id: standard-v3
+  resources_spec:
+    memory: "2147483648"
+    cores: "2"
+    core_fraction: "100"
+  boot_disk_spec:
+    mode: READ_WRITE
+    disk_spec:
+      type_id: network-hdd
+      size: "16106127360"
+      image_id: fdvdgcktn556m9j4jt00
+  network_interface_specs:
+    - network_id: enpcm3jak87a8oft2b26
+      subnet_ids:
+        - e9b50qvhi6ia857aqv62
+        - e2lrenud2o24feoecv1n
+      primary_v4_address_spec: {}
+  scheduling_policy: {}
+scale_policy:
+  fixed_scale:
+    size: "2"
+deploy_policy:
+  max_unavailable: "1"
+  startup_duration: 0s
+  strategy: PROACTIVE
+allocation_policy:
+  zones:
+    - zone_id: ru-central1-a
+    - zone_id: ru-central1-b

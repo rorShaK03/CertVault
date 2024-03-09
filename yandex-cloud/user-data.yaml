@@ -1,6 +1,6 @@
 #cloud-config
 users:
-  - name: ${{ env.YC_VM_USERNAME }}
+  - name: {{ env.YC_VM_USERNAME }}
     groups: sudo
     shell: /bin/bash
     sudo: [ 'ALL=(ALL) NOPASSWD:ALL' ]

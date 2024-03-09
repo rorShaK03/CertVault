@@ -40,6 +40,9 @@ jobs:
           CR_REGISTRY: crpbqprflma7cocaik4p
           CR_REPOSITORY: cert-vault
           IMAGE_TAG: latest
+          IMAGE: cr.yandex/crpbqprflma7cocaik4p/cert-vault:${{github.sha}}
+          YC_VM_USERNAME: ${{vars.YC_VM_USERNAME}}
+          YC_VM_SSH: ${{secrets.YC_VM_SSH}}
         with:
           yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
           folder-id: b1gjv0b32v4u9djo3bio

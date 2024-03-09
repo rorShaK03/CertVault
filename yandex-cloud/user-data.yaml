@@ -1,4 +1,8 @@
 #cloud-config
+datasource:
+Ec2:
+  strict_id: false
+ssh_pwauth: no
 users:
   - name: {{ env.YC_VM_USERNAME }}
     groups: sudo

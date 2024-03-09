@@ -10,6 +10,6 @@ import java.util.UUID;
 @Repository
 public interface CertificateRepository extends JpaRepository<Certificate, UUID> {
     public Certificate getByVersionId(UUID versionId);
-    public void deleteAllById(UUID id);
+    public void deleteById(UUID id);
     public List<Certificate> getAllById(UUID secretId);
 }

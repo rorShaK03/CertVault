@@ -39,7 +39,7 @@ public class CertificateService implements SecretService {
 
     @Override
     public void removeAllById(UUID secretId) {
-        certificateRepository.deleteAllById(secretId);
+        certificateRepository.deleteById(secretId);
     }
 
     @Override

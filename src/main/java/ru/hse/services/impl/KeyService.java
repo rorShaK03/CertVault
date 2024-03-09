@@ -40,7 +40,7 @@ public class KeyService implements SecretService {
 
     @Override
     public void removeAllById(UUID secretId) {
-        keyRepository.deleteAllById(secretId);
+        keyRepository.deleteById(secretId);
     }
 
     @Override

@@ -11,6 +11,6 @@ import java.util.UUID;
 @Repository
 public interface KeyRepository extends JpaRepository<Key, UUID> {
     public Key getByVersionId(UUID versionId);
-    public void deleteAllById(UUID id);
+    public void deleteById(UUID id);
     public List<Key> getAllById(UUID secretId);
 }

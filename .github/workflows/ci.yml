@@ -20,7 +20,7 @@ jobs:
           distribution: 'corretto'
           java-version: '17'
       - name: Execute maven build
-        run: mvn clean package spring_boot:repackage
+        run: mvn clean package spring-boot:repackage
       - name: Docker Image Building
         run: docker build . --tag ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}}
       - name: Login to Yandex Cloud

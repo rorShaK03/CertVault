@@ -1,9 +1,7 @@
-name: Docker Image CI
+name: Deployment to Yandex Cloud
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
     branches: [ "main" ]
 
 jobs:

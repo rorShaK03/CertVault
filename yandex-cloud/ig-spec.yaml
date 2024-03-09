@@ -11,7 +11,7 @@ instance_template:
     disk_spec:
       type_id: network-hdd
       size: "16106127360"
-      image_id: fd8ba9d5mfvlncknt2kd
+      image_id: fd844vvh32eo881foach
   network_interface_specs:
     - network_id: enpcm3jak87a8oft2b26
       subnet_ids:

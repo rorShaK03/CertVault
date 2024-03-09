@@ -3,6 +3,7 @@ package ru.hse.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.hse.dao.requests.UploadSecretRequest;
 import ru.hse.dao.responses.SecretVersionsResponse;
@@ -13,7 +14,7 @@ import ru.hse.services.impl.KeyService;
 import java.util.List;
 import java.util.UUID;
 
-@RestController
+@Controller
 @RequestMapping("/api/v1/key")
 @RequiredArgsConstructor
 public class KeyController {

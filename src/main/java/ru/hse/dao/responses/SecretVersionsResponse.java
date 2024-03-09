@@ -3,12 +3,14 @@ package ru.hse.dao.responses;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.hse.models.secrets.Secret;
 import ru.hse.models.secrets.types.Certificate;
 
 import java.util.List;
 import java.util.UUID;
 
+@NoArgsConstructor
 public class SecretVersionsResponse {
     class SecretVersion {
         int versionNum;

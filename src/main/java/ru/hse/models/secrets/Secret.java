@@ -10,8 +10,8 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 public abstract class Secret {
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
+    @Getter
     protected UUID id;
 
     @Id
@@ -27,5 +27,6 @@ public abstract class Secret {
 
     public Secret(String secret) {
         this.secret = secret;
+        this.id = UUID.randomUUID();
     }
 }

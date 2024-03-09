@@ -9,6 +9,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+@Service
 public class DecrypterImpl implements Decrypter {
     @Value("${encryption.key}")
     private String key;

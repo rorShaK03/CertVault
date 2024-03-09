@@ -6,11 +6,6 @@ instance_template:
     memory: "2147483648"
     cores: "2"
     core_fraction: "100"
-  boot_disk_spec:
-    mode: READ_WRITE
-    disk_spec:
-      type_id: network-hdd
-      size: "16106127360"
   network_interface_specs:
     - network_id: enpcm3jak87a8oft2b26
       subnet_ids:

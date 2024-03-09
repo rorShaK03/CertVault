@@ -8,7 +8,10 @@ instance_template:
     core_fraction: "100"
   boot_disk_spec:
     mode: READ_WRITE
-    disk_id: epdi0rfnq00jk148htqs
+    disk_spec:
+      type_id: network-hdd
+      size: "16106127360"
+      image_id: fd8ba9d5mfvlncknt2kd
   network_interface_specs:
     - network_id: enpcm3jak87a8oft2b26
       subnet_ids:

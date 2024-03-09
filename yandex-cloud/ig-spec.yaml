@@ -1,6 +1,7 @@
 folder_id: b1gjv0b32v4u9djo3bio
 name: certvault-ig
 instance_template:
+  service_account_id: aje1urj78v41fa3bkc1v
   platform_id: standard-v3
   resources_spec:
     memory: "2147483648"

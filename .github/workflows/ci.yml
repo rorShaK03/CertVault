@@ -20,27 +20,27 @@ jobs:
           distribution: 'corretto'
           java-version: '17'
       - name: Execute maven build
-        run: mvn clean package
+        run: mvn clean package spring_boot:repackage
       - name: Docker Image Building
-        run: docker build --build-arg JAR_FILE=target/\*.jar . --tag cr.yandex/crpbqprflma7cocaik4p/cert-vault:${{github.sha}}
-      - name: Login to Yandex Cloud Container Registry
+        run: docker build . --tag ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}}
+      - name: Login to Yandex Cloud
         id: login-cr
         uses: yc-actions/yc-cr-login@v1
         with:
           yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}    
-      - name: Docker Image Pushing
-        run: docker push cr.yandex/crpbqprflma7cocaik4p/cert-vault:${{github.sha}}
+      - name: Push Docker image to registry
+        run: docker push ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}}
       - name: Add latest tag
         if: github.ref == 'refs/heads/main'
-        run: docker tag cr.yandex/crpbqprflma7cocaik4p/cert-vault:${{github.sha}} cr.yandex/crpbqprflma7cocaik4p/cert-vault:latest && docker push cr.yandex/crpbqprflma7cocaik4p/cert-vault:latest
-      - name: Deploy to Instance group
+        run: docker tag ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}} ${{vars.DOCKER_REGISTRY_REPO}}:latest && docker push ${{vars.DOCKER_REGISTRY_REPO}}:latest
+      - name: Deploy to Instance group in Yandex Cloud
         id: deploy-coi
         uses: yc-actions/yc-coi-deploy-ig@v2
         env:
           CR_REGISTRY: crpbqprflma7cocaik4p
           CR_REPOSITORY: cert-vault
           IMAGE_TAG: latest
-          IMAGE: cr.yandex/crpbqprflma7cocaik4p/cert-vault:${{github.sha}}
+          IMAGE: ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}}
           YC_VM_USERNAME: ${{vars.YC_VM_USERNAME}}
           YC_VM_SSH: ${{secrets.YC_VM_SSH}}
         with:

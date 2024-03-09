@@ -32,4 +32,4 @@ jobs:
         run: docker push cr.yandex/crpbqprflma7cocaik4p/cert-vault:${{github.sha}}
       - name: Latest Docker Image
         if: github.ref == 'refs/heads/main'
-        run: docker tag cr.yandex/crpbqprflma7cocaik4p/cert-vault:latest cr.yandex/crpbqprflma7cocaik4p/cert-vault:${{github.sha}} && docker push cr.yandex/crpbqprflma7cocaik4p/cert-vault:latest  
+        run: docker tag cr.yandex/crpbqprflma7cocaik4p/cert-vault:${{github.sha}} cr.yandex/crpbqprflma7cocaik4p/cert-vault:latest && docker push cr.yandex/crpbqprflma7cocaik4p/cert-vault:latest  

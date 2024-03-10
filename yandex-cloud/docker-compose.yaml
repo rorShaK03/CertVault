@@ -4,7 +4,7 @@ services:
   cert-vault:
     image: {{ env.IMAGE }}
     environment:
-      - spring.datasource.url = 'jdbc:postgresql://c-c9qechd21fdqv1d528r1.rw.mdb.yandexcloud.net:6432/certVault'
+      - spring.datasource.url = jdbc:postgresql://c-c9qechd21fdqv1d528r1.rw.mdb.yandexcloud.net:6432/certVault
       - spring.datasource.username = ${POSTGRES_LOGIN}
       - spring.datasource.password = ${POSTGRES_PASSWORD}
     ports:

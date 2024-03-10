@@ -15,7 +15,7 @@ services:
     networks:
       - spring-cloud-network
     volumes:
-      - /data/.env:/.env
+      - /run/env:/.env
 networks:
   spring-cloud-network:
     driver: bridge

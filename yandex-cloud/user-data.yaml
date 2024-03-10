@@ -1,8 +1,8 @@
 #cloud-config
 runcmd:
-  - mkdir /run/yc
+  - "mkdir /run/yc"
   - "curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh >> /run/yc/install.sh"
-  - [ sudo, bash, /run/yc/install.sh]
+  - "sudo bash /run/yc/install.sh"
   - "echo 'export POSTGRES_LOGIN=$(sudo /root/yandex-cloud/bin/yc lockbox payload get --id e6qd1rqko2qtg45sdtkr --key POSTGRES_LOGIN)' >> /etc/profile"
   - "echo 'export POSTGRES_PASSWORD=$(sudo /root/yandex-cloud/bin/yc lockbox payload get --id e6qd1rqko2qtg45sdtkr --key POSTGRES_PASSWORD)' >> /etc/profile"
 datasource:

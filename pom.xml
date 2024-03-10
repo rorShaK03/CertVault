@@ -124,7 +124,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>ru.hse.Main</mainClass>
+                            <mainClass>ru.hse.CertVault</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

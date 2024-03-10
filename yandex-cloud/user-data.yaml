@@ -1,10 +1,5 @@
 #cloud-config
-runcmd:
-  - "mkdir /run/yc"
-  - "curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh >> /run/yc/install.sh"
-  - "sudo bash /run/yc/install.sh"
-  - "echo \"POSTGRES_LOGIN=$(sudo /root/yandex-cloud/bin/yc lockbox payload get --id e6qd1rqko2qtg45sdtkr --key POSTGRES_LOGIN)\" >> /run/env"
-  - "echo \"POSTGRES_PASSWORD=$(sudo /root/yandex-cloud/bin/yc lockbox payload get --id e6qd1rqko2qtg45sdtkr --key POSTGRES_PASSWORD)\" >> /run/env"
+runcmd: []
 datasource:
   Ec2:
     strict_id: false

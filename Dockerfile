@@ -3,7 +3,8 @@ FROM amazoncorretto:17
 WORKDIR /source
 
 COPY target/*.jar app.jar
+COPY entrypoint.sh entrypoint.sh
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "/source/app.jar"]
+ENTRYPOINT ["./entrypoint.sh"]

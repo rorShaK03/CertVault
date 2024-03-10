@@ -3,10 +3,6 @@ version: '3.7'
 services:
   cert-vault:
     image: {{ env.IMAGE }}
-    environment:
-      - spring.datasource.url=jdbc:postgresql://c-c9qechd21fdqv1d528r1.rw.mdb.yandexcloud.net:6432/certVault
-    env_file:
-      - .env
     ports:
       - '80:80'
       - '8080:8080'
@@ -14,8 +10,6 @@ services:
     restart: always
     networks:
       - spring-cloud-network
-    volumes:
-      - /run/env:/.env
 networks:
   spring-cloud-network:
     driver: bridge

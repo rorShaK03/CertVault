@@ -1,5 +1,5 @@
 folder_id: b1gjv0b32v4u9djo3bio
-name: certvault-ig
+name: certvault-deploy-ig
 instance_template:
   service_account_id: ajegr1lr9vve6nlm0q1n
   platform_id: standard-v3

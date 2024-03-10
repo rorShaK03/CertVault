@@ -1,9 +1,8 @@
 #cloud-config
 runcmd:
   - "curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash"
-  - "source \"/home/admin/.bashrc\""
-  - "export POSTGRES_LOGIN=$(yc lockbox payload get --id e6qd1rqko2qtg45sdtkr --key POSTGRES_LOGIN)"
-  - "export POSTGRES_PASSWORD=$(yc lockbox payload get --id e6qd1rqko2qtg45sdtkr --key POSTGRES_PASSWORD)"
+  - "export POSTGRES_LOGIN=$(/home/admin/yandex-cloud/bin/yc lockbox payload get --id e6qd1rqko2qtg45sdtkr --key POSTGRES_LOGIN)"
+  - "export POSTGRES_PASSWORD=$(/home/admin/yandex-cloud/bin/yc lockbox payload get --id e6qd1rqko2qtg45sdtkr --key POSTGRES_PASSWORD)"
 datasource:
   Ec2:
     strict_id: false

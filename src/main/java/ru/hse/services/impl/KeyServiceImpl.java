@@ -4,18 +4,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hse.code.Decrypter;
 import ru.hse.code.Encrypter;
-import ru.hse.models.secrets.Secret;
-import ru.hse.models.secrets.types.Certificate;
-import ru.hse.models.secrets.types.Key;
+import ru.hse.models.secrets.Key;
 import ru.hse.repositories.KeyRepository;
-import ru.hse.services.SecretService;
+import ru.hse.services.KeyService;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class KeyService implements SecretService {
+public class KeyServiceImpl implements KeyService {
     private final KeyRepository keyRepository;
     private final Encrypter encrypter;
     private final Decrypter decrypter;
@@ -28,7 +26,7 @@ public class KeyService implements SecretService {
     }
 
     @Override
-    public Key findSecretByVersionId(UUID versionId) throws IllegalArgumentException {
+    public Key findKeyByVersionId(UUID versionId) throws IllegalArgumentException {
         Key key = keyRepository.getByVersionId(versionId);
         if (key == null) {
             throw new IllegalArgumentException("Certificate with such version ID does not exist.");
@@ -40,11 +38,12 @@ public class KeyService implements SecretService {
 
     @Override
     public void removeAllById(UUID secretId) {
-        keyRepository.deleteById(secretId);
+        var certs = getAllKeysById(secretId);
+        keyRepository.deleteAll(certs);
     }
 
     @Override
-    public List<? extends Secret> getAllSecretsById(UUID secretId) {
+    public List<Key> getAllKeysById(UUID secretId) {
         return keyRepository.getAllById(secretId);
     }
 }

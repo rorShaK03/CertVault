@@ -1,4 +1,4 @@
-package ru.hse.dao.requests;
+package ru.hse.dto.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

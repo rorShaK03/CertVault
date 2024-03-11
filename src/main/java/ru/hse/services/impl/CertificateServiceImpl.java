@@ -2,22 +2,23 @@ package ru.hse.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.hse.code.Decrypter;
+import ru.hse.code.Encrypter;
 import ru.hse.code.impl.DecrypterImpl;
 import ru.hse.code.impl.EncrypterImpl;
-import ru.hse.models.secrets.Secret;
-import ru.hse.models.secrets.types.Certificate;
+import ru.hse.models.secrets.Certificate;
 import ru.hse.repositories.CertificateRepository;
-import ru.hse.services.SecretService;
+import ru.hse.services.CertificateService;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class CertificateService implements SecretService {
+public class CertificateServiceImpl implements CertificateService {
     private final CertificateRepository certificateRepository;
-    private final EncrypterImpl encrypter;
-    private final DecrypterImpl decrypter;
+    private final Encrypter encrypter;
+    private final Decrypter decrypter;
 
     @Override
     public UUID addSecret(String secret) {
@@ -27,7 +28,7 @@ public class CertificateService implements SecretService {
     }
 
     @Override
-    public Certificate findSecretByVersionId(UUID versionId) throws IllegalArgumentException {
+    public Certificate findCertByVersionId(UUID versionId) throws IllegalArgumentException {
         Certificate cert = certificateRepository.getByVersionId(versionId);
         if (cert == null) {
             throw new IllegalArgumentException("Certificate with such version ID does not exist.");
@@ -39,11 +40,12 @@ public class CertificateService implements SecretService {
 
     @Override
     public void removeAllById(UUID secretId) {
-        certificateRepository.deleteById(secretId);
+        var certs = getAllCertsById(secretId);
+        certificateRepository.deleteAll(certs);
     }
 
     @Override
-    public List<? extends Secret> getAllSecretsById(UUID secretId) {
+    public List<Certificate> getAllCertsById(UUID secretId) {
         return certificateRepository.getAllById(secretId);
     }
 }

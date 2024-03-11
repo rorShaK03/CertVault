@@ -20,7 +20,7 @@ jobs:
       - name: Build JAR
         run: mvn clean package spring-boot:repackage
       - name: Build Docker image
-        run: docker build ./deploy --tag ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}}
+        run: docker build ./deploy --tag ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}} --file deploy/Dockerfile
       - name: Login to Yandex Cloud
         id: login-cr
         uses: yc-actions/yc-cr-login@v1

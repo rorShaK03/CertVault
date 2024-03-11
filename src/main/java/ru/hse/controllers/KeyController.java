@@ -5,13 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import ru.hse.dao.requests.UploadSecretRequest;
-import ru.hse.dao.responses.SecretVersionsResponse;
+import ru.hse.dto.requests.UploadSecretRequest;
+import ru.hse.dto.responses.SecretVersionsResponse;
 import ru.hse.errors.NotFoundError;
-import ru.hse.models.secrets.types.Key;
-import ru.hse.services.impl.KeyService;
+import ru.hse.models.secrets.Key;
+import ru.hse.services.KeyService;
 
-import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -20,7 +19,7 @@ import java.util.UUID;
 public class KeyController {
     private final KeyService keyService;
     @PostMapping
-    public ResponseEntity<UUID> uploadNewKey(UploadSecretRequest body) {
+    public ResponseEntity<UUID> uploadNewKey(@RequestBody UploadSecretRequest body) {
         // Returns version_id
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -29,13 +28,13 @@ public class KeyController {
 
     // Получить секрет можно только по version_id
     @GetMapping("/{versionId}")
-    public ResponseEntity<Key> getKey(@PathVariable UUID versionId) {
-        return ResponseEntity.ok(keyService.findSecretByVersionId(versionId));
+    public ResponseEntity<Key> getKey(@PathVariable("versionId") UUID versionId) {
+        return ResponseEntity.ok(keyService.findKeyByVersionId(versionId));
     }
 
     // Удаляются сразу все версии секрета по secretId
     @PostMapping("/remove/{secretId}")
-    public ResponseEntity<UUID> removeCert(@PathVariable UUID secretId) {
+    public ResponseEntity<UUID> removeCert(@PathVariable("secretId") UUID secretId) {
         // Returns secret_id
         keyService.removeAllById(secretId);
         return ResponseEntity.ok(secretId);
@@ -43,8 +42,8 @@ public class KeyController {
 
     // Можно получить список version_id всех версий по secret_id
     @GetMapping("/versions/{secretId}")
-    public ResponseEntity<SecretVersionsResponse> getKeyVersions(@PathVariable UUID secretId) {
-        return ResponseEntity.ok(new SecretVersionsResponse(keyService.getAllSecretsById(secretId)));
+    public ResponseEntity<SecretVersionsResponse> getKeyVersions(@PathVariable("secretId") UUID secretId) {
+        return ResponseEntity.ok(new SecretVersionsResponse(keyService.getAllKeysById(secretId)));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

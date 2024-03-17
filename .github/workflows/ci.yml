@@ -20,7 +20,7 @@ jobs:
       - name: Build JAR
         run: mvn clean package spring-boot:repackage
       - name: Build Docker image
-        run: docker build . --tag ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}}
+        run: docker build --tag ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}} --file "deploy/Dockerfile" .
       - name: Login to Yandex Cloud
         id: login-cr
         uses: yc-actions/yc-cr-login@v1
@@ -35,16 +35,13 @@ jobs:
         id: deploy-coi
         uses: yc-actions/yc-coi-deploy-ig@v2
         env:
-          CR_REGISTRY: crpbqprflma7cocaik4p
-          CR_REPOSITORY: cert-vault
-          IMAGE_TAG: latest
           IMAGE: ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}}
           YC_VM_USERNAME: ${{vars.YC_VM_USERNAME}}
           YC_VM_SSH: ${{secrets.YC_VM_SSH}}
         with:
           yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
           folder-id: b1gjv0b32v4u9djo3bio
-          ig-spec-path: './yandex-cloud/ig-spec.yaml'
-          user-data-path: './yandex-cloud/user-data.yaml'
-          docker-compose-path: './yandex-cloud/docker-compose.yaml'
+          ig-spec-path: './deploy/ig-spec.yaml'
+          user-data-path: './deploy/user-data.yaml'
+          docker-compose-path: './deploy/docker-compose.yaml'
         

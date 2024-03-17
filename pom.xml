@@ -163,13 +163,6 @@
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>10.9.1</version>
-                <configuration>
-                    <user>admin</user>
-                    <password>qwerty</password>
-                    <schemas>
-                        <schema>public</schema>
-                    </schemas>
-                </configuration>
             </plugin>
             <plugin>
                 <!-- Build an executable JAR -->
@@ -180,7 +173,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>ru.hse.Main</mainClass>
+                            <mainClass>ru.hse.CertVault</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

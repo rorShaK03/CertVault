@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface KeyService {
-    public UUID addSecret(String secret);
-    public Key findKeyByVersionId(UUID versionId);
-    public void removeAllById(UUID secretId);
-    public List<Key> getAllKeysById(UUID secretId);
+    public UUID addSecret(String secret, UUID userId);
+    public Key findKeyByVersionId(UUID versionId, UUID userId);
+    public void removeAllById(UUID secretId, UUID userId);
+    public List<Key> getAllKeysById(UUID secretId, UUID userId);
 }

@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CertificateService {
-    public UUID addSecret(String secret);
-    public Certificate findCertByVersionId(UUID versionId);
-    public void removeAllById(UUID secretId);
-    public List<Certificate> getAllCertsById(UUID secretId);
+    public UUID addSecret(String secret, UUID userId);
+    public Certificate findCertByVersionId(UUID versionId, UUID userId);
+    public void removeAllById(UUID secretId, UUID userId);
+    public List<Certificate> getAllCertsById(UUID secretId, UUID userId);
 }

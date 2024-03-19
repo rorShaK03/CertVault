@@ -90,7 +90,7 @@ resource "yandex_mdb_postgresql_cluster" "postgres_cluster" {
   config {
     version = "16"
     resources {
-      resource_preset_id = "s3-c2-m8 "
+      resource_preset_id = "s3-c2-m4"
       disk_type_id       = "network-ssd"
       disk_size          = 10
     }

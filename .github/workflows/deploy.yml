@@ -6,9 +6,11 @@ on:
 
 jobs:
 
-  build:
+  plan:
 
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: Code Checkout
@@ -21,7 +23,7 @@ jobs:
         run: mvn clean package spring-boot:repackage
       - name: Build Docker image
         run: docker build --tag ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}} --file "deploy/Dockerfile" .
-      - name: Login to Yandex Cloud
+      - name: Login to Container Registry
         id: login-cr
         uses: yc-actions/yc-cr-login@v1
         with:

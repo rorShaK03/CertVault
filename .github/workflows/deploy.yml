@@ -66,6 +66,8 @@ jobs:
         with:
           path: deploy/terraform
           label: production
+          with:
+            auto_approve: true
           variables: |
             cloud_id = "${{vars.YC_CLOUD_ID}}"
             folder_id = "${{vars.YC_FOLDER_ID}}"

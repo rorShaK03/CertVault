@@ -1,5 +1,7 @@
 .idea/
 target/
+**/.terraform
+**/.terraform.lock.hcl
 # Compiled class file
 *.class
 

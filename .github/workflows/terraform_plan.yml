@@ -1,0 +1,54 @@
+name: Create terraform plan
+
+on: [pull_request]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    name: Create a plan for terraform configuration
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Read config files
+        id: configs
+        env:
+          YC_VM_USERNAME: ${{ vars.YC_VM_USERNAME }}
+          YC_VM_SSH: ${{ secrets.YC_VM_SSH }}
+          IMAGE: ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}}
+        run: |
+          sed -i "s/\${YC_VM_USERNAME}/$YC_VM_USERNAME/g" deploy/user-data.yaml
+          sed -i "s/\${YC_VM_SSH}/$YC_VM_SSH/g" deploy/user-data.yaml
+          sed -i "s|\${IMAGE}|$IMAGE|g" deploy/docker-compose.yaml
+          {
+            echo "userdata<<EOF"
+            echo "$(cat deploy/user-data.yaml)"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
+          {
+            echo "compose<<EOF"
+            echo "$(cat deploy/docker-compose.yaml)"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
+      - name: terraform plan
+        uses: dflook/terraform-plan@v1
+        env:
+          TERRAFORM_PRE_RUN: |
+            exec 1<&-
+            exec 2<&-
+            echo '${{secrets.YC_SA_JSON_CREDENTIALS}}' > /key.json
+            echo '${{steps.configs.outputs.userdata}}' > /user-data.yaml
+            echo '${{steps.configs.outputs.compose}}' > /docker-compose.yaml
+        with:
+          path: deploy/terraform
+          label: production
+          variables: |
+            cloud_id = "${{vars.YC_CLOUD_ID}}"
+            folder_id = "${{vars.YC_FOLDER_ID}}"
+            app_instance_sa_id = "${{vars.YC_INSTANCE_SA_ID}}"
+            ig_deploy_sa_id = "${{vars.YC_IG_SA_ID}}"

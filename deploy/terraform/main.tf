@@ -42,7 +42,7 @@ data "yandex_compute_image" "container-optimized-image" {
 }
 
 resource "yandex_compute_instance_group" "ig-with-coi" {
-  depends_on = [yandex_mdb_postgresql_cluster.postgres_cluster, yandex_lockbox_secret.my_secret]
+  depends_on = [yandex_mdb_postgresql_cluster.postgres_cluster, yandex_lockbox_secret_version.last_version]
   name = "ig-with-coi"
   instance_template {
     service_account_id = var.app_instance_sa_id

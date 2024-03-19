@@ -9,7 +9,6 @@ permissions:
 jobs:
   plan:
     runs-on: ubuntu-latest
-    name: Create a plan for terraform configuration
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:

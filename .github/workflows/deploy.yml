@@ -31,17 +31,41 @@ jobs:
       - name: Add latest tag
         if: github.ref == 'refs/heads/main'
         run: docker tag ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}} ${{vars.DOCKER_REGISTRY_REPO}}:latest && docker push ${{vars.DOCKER_REGISTRY_REPO}}:latest
-      - name: Deploy to Instance group in Yandex Cloud
-        id: deploy-coi
-        uses: yc-actions/yc-coi-deploy-ig@v2
+      - name: Read deploy metadata files
+        id: configs
         env:
+          YC_VM_USERNAME: ${{ vars.YC_VM_USERNAME }}
+          YC_VM_SSH: ${{ secrets.YC_VM_SSH }}
           IMAGE: ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}}
-          YC_VM_USERNAME: ${{vars.YC_VM_USERNAME}}
-          YC_VM_SSH: ${{secrets.YC_VM_SSH}}
+        run: |
+          sed -i "s/\${YC_VM_USERNAME}/$YC_VM_USERNAME/g" deploy/user-data.yaml
+          sed -i "s/\${YC_VM_SSH}/$YC_VM_SSH/g" deploy/user-data.yaml
+          sed -i "s|\${IMAGE}|$IMAGE|g" deploy/docker-compose.yaml
+          {
+            echo "userdata<<EOF"
+            echo "$(cat deploy/user-data.yaml)"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
+          {
+            echo "compose<<EOF"
+            echo "$(cat deploy/docker-compose.yaml)"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
+      - name: terraform apply
+        uses: dflook/terraform-apply@v1
+        env:
+          TERRAFORM_PRE_RUN: |
+            exec 1<&-
+            exec 2<&-
+            echo '${{secrets.YC_SA_JSON_CREDENTIALS}}' > /key.json
+            echo '${{steps.configs.outputs.userdata}}' > /user-data.yaml
+            echo '${{steps.configs.outputs.compose}}' > /docker-compose.yaml
         with:
-          yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
-          folder-id: b1gjv0b32v4u9djo3bio
-          ig-spec-path: './deploy/ig-spec.yaml'
-          user-data-path: './deploy/user-data.yaml'
-          docker-compose-path: './deploy/docker-compose.yaml'
+          path: deploy/terraform
+          label: production
+          variables: |
+            cloud_id = "${{vars.YC_CLOUD_ID}}"
+            folder_id = "${{vars.YC_FOLDER_ID}}"
+            app_instance_sa_id = "${{vars.YC_INSTANCE_SA_ID}}"
+            ig_deploy_sa_id = "${{vars.YC_IG_SA_ID}}"
         

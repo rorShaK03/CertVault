@@ -20,9 +20,11 @@ jobs:
         env:
           YC_VM_USERNAME: ${{ vars.YC_VM_USERNAME }}
           YC_VM_SSH: ${{ secrets.YC_VM_SSH }}
+          IMAGE: ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}}
         run: |
           sed -i "s/\${YC_VM_USERNAME}/$YC_VM_USERNAME/g" deploy/user-data.yaml
           sed -i "s/\${YC_VM_SSH}/$YC_VM_SSH/g" deploy/user-data.yaml
+          sed -i "s|\${IMAGE}|$IMAGE|g" deploy/docker-compose.yaml
           {
             echo "userdata<<EOF"
             echo "$(cat deploy/user-data.yaml)"
@@ -49,3 +51,4 @@ jobs:
             cloud_id = "${{vars.YC_CLOUD_ID}}"
             folder_id = "${{vars.YC_FOLDER_ID}}"
             app_instance_sa_id = "${{vars.YC_INSTANCE_SA_ID}}"
+            ig_deploy_sa_id = "${{vars.YC_IG_SA_ID}}"

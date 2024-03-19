@@ -9,3 +9,7 @@ variable "folder_id" {
 variable "app_instance_sa_id" {
   type = string
 }
+
+variable "ig_deploy_sa_id" {
+  type = string
+}

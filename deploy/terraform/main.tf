@@ -42,6 +42,7 @@ data "yandex_compute_image" "container-optimized-image" {
 }
 
 resource "yandex_compute_instance_group" "ig-with-coi" {
+  depends_on = [yandex_mdb_postgresql_cluster.postgres_cluster, yandex_lockbox_secret.my_secret]
   name = "ig-with-coi"
   instance_template {
     service_account_id = var.app_instance_sa_id
@@ -90,7 +91,7 @@ resource "yandex_mdb_postgresql_cluster" "postgres_cluster" {
   config {
     version = "16"
     resources {
-      resource_preset_id = "s3-c2-m4"
+      resource_preset_id = "s3-c2-m8"
       disk_type_id       = "network-ssd"
       disk_size          = 10
     }

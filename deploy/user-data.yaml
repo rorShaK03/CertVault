@@ -1,5 +1,6 @@
 #cloud-config
-runcmd: []
+runcmd:
+  - wget -O - https://monitoring.api.cloud.yandex.net/monitoring/v2/unifiedAgent/config/install.sh | bash
 datasource:
   Ec2:
     strict_id: false

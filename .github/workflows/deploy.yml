@@ -72,4 +72,7 @@ jobs:
             folder_id = "${{vars.YC_FOLDER_ID}}"
             app_instance_sa_id = "${{vars.YC_INSTANCE_SA_ID}}"
             ig_deploy_sa_id = "${{vars.YC_IG_SA_ID}}"
+          backend_config: |
+            access_key=${{secrets.YC_SA_STATIC_KEY_ID}}
+            secret_key=${{secrets.YC_SA_STATIC_KEY_SECRET}}
         

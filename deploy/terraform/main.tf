@@ -13,6 +13,7 @@ provider "yandex" {
   service_account_key_file = "/key.json"
 }
 
+
 locals {
   zones = [
     {

@@ -20,10 +20,12 @@ jobs:
           YC_VM_USERNAME: ${{ vars.YC_VM_USERNAME }}
           YC_VM_SSH: ${{ secrets.YC_VM_SSH }}
           IMAGE: ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}}
+          FOLDER_ID: ${{vars.YC_FOLDER_ID}}
         run: |
           sed -i "s/\${YC_VM_USERNAME}/$YC_VM_USERNAME/g" deploy/user-data.yaml
           sed -i "s/\${YC_VM_SSH}/$YC_VM_SSH/g" deploy/user-data.yaml
           sed -i "s|\${IMAGE}|$IMAGE|g" deploy/docker-compose.yaml
+          sed -i "s|\${FOLDER_ID}|$FOLDER_ID|g" deploy/docker-compose.yaml
           {
             echo "userdata<<EOF"
             echo "$(cat deploy/user-data.yaml)"

@@ -11,4 +11,5 @@ public interface CertificateService {
     public Certificate findCertByVersionId(UUID versionId, UUID userId);
     public void removeAllById(UUID secretId, UUID userId);
     public List<Certificate> getAllCertsById(UUID secretId, UUID userId);
+    public UUID updateKey(UUID secretId, String secret, UUID userId);
 }

@@ -73,4 +73,16 @@ public class KeyServiceImpl implements KeyService {
         }
         return result;
     }
+
+    @Override
+    public UUID updateKey(UUID secretId, String secret, UUID userId) {
+        Right right = rightRepository.findByUserIdAndSecretId(userId, secretId);
+        if (right != null && (right.getRole() == Role.EDITOR || right.getRole() == Role.ADMIN)) {
+            Key key = new Key(encrypter.encrypt(secret));
+            keyRepository.save(key);
+            return key.getVersionId();
+        } else {
+            throw new IllegalArgumentException("Have no enough rights for updating the key");
+        }
+    }
 }

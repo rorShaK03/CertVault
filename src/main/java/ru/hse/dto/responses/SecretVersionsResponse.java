@@ -10,7 +10,6 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 public class SecretVersionsResponse {
-    Integer test = 68;
     List<SecretVersion> versions;
 
     @Getter

@@ -11,4 +11,5 @@ public interface KeyService {
     public Key findKeyByVersionId(UUID versionId, UUID userId);
     public void removeAllById(UUID secretId, UUID userId);
     public List<Key> getAllKeysById(UUID secretId, UUID userId);
+    public UUID updateKey(UUID secretId, String secret, UUID userId);
 }

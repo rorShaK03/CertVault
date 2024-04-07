@@ -35,6 +35,13 @@ public class CertificateController {
         return ResponseEntity.ok(secretId);
     }
 
+    @PostMapping("/update/{secretId}")
+    public ResponseEntity<UUID> updateCert(@AuthenticationPrincipal User user, @PathVariable("secretId") UUID secretId,
+                                           @RequestBody UploadSecretRequest body) {
+        // Returns version_id
+        return new ResponseEntity<UUID>(certificateService.updateKey(secretId, body.getSecret(), user.getId()), HttpStatus.OK);
+    }
+
     // Получить секрет можно только по version_id
     @GetMapping("/{versionId}")
     public ResponseEntity<Certificate> getCert(@AuthenticationPrincipal User user, @PathVariable("versionId") UUID versionId) {

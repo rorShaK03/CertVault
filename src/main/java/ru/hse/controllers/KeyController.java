@@ -43,6 +43,13 @@ public class KeyController {
         return ResponseEntity.ok(secretId);
     }
 
+    @PostMapping("/update/{secretId}")
+    public ResponseEntity<UUID> updateCert(@AuthenticationPrincipal User user, @PathVariable("secretId") UUID secretId,
+                                           @RequestBody UploadSecretRequest body) {
+        // Returns version_id
+        return new ResponseEntity<UUID>(keyService.updateKey(secretId, body.getSecret(), user.getId()), HttpStatus.OK);
+    }
+
     // Можно получить список version_id всех версий по secret_id
     @GetMapping("/versions/{secretId}")
     public ResponseEntity<SecretVersionsResponse> getKeyVersions(@AuthenticationPrincipal User user,

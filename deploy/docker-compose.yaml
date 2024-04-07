@@ -18,3 +18,4 @@ services:
     environment:
       - PROC_DIRECTORY=/ua_proc
       - FOLDER_ID=${FOLDER_ID}
+    restart: always

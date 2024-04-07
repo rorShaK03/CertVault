@@ -15,7 +15,6 @@ channels:
       output:
         plugin: yc_metrics
         config:
-          folder_id: "$FOLDER_ID"
           iam:
             cloud_meta: {}
 

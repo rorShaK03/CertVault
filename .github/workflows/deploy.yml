@@ -22,15 +22,19 @@ jobs:
           java-version: '17'
       - name: Build JAR
         run: mvn clean package spring-boot:repackage
-      - name: Build Docker image
-        run: docker build --tag ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}} --file "deploy/Dockerfile" .
+      - name: Build Docker images
+        run: |
+          docker build --tag ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}} --file "deploy/Dockerfile" .
+          docker build --tag ${{vars.DOCKER_REGISTRY_UA_REPO}}:latest --file "deploy/unified-agent/Dockerfile" .
       - name: Login to Container Registry
         id: login-cr
         uses: yc-actions/yc-cr-login@v1
         with:
           yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}    
-      - name: Push Docker image to registry
-        run: docker push ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}}
+      - name: Push Docker images to registry
+        run: |
+          docker push ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}}
+          docker push ${{vars.DOCKER_REGISTRY_UA_REPO}}:latest
       - name: Add latest tag
         if: github.ref == 'refs/heads/main'
         run: docker tag ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}} ${{vars.DOCKER_REGISTRY_REPO}}:latest && docker push ${{vars.DOCKER_REGISTRY_REPO}}:latest
@@ -40,11 +44,13 @@ jobs:
           YC_VM_USERNAME: ${{ vars.YC_VM_USERNAME }}
           YC_VM_SSH: ${{ secrets.YC_VM_SSH }}
           IMAGE: ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}}
+          UA_IMAGE: ${{vars.DOCKER_REGISTRY_UA_REPO}}:latest
           FOLDER_ID: ${{vars.YC_FOLDER_ID}}
         run: |
           sed -i "s/\${YC_VM_USERNAME}/$YC_VM_USERNAME/g" deploy/user-data.yaml
           sed -i "s/\${YC_VM_SSH}/$YC_VM_SSH/g" deploy/user-data.yaml
           sed -i "s|\${IMAGE}|$IMAGE|g" deploy/docker-compose.yaml
+          sed -i "s|\${UA_IMAGE}|$UA_IMAGE|g" deploy/docker-compose.yaml
           sed -i "s|\${FOLDER_ID}|$FOLDER_ID|g" deploy/docker-compose.yaml
           {
             echo "userdata<<EOF"

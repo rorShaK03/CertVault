@@ -9,7 +9,7 @@ services:
       - "443:443"
     restart: always
   unified-agent:
-    image: cr.yandex/yc/unified-agent
+    image: ${UA_IMAGE}
     ports:
       - "16241:16241"
     uts: host

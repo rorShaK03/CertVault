@@ -25,7 +25,7 @@ jobs:
       - name: Build Docker images
         run: |
           docker build --tag ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}} --file "deploy/Dockerfile" .
-          docker build --tag ${{vars.DOCKER_REGISTRY_UA_REPO}}:latest --file "deploy/unified-agent/Dockerfile" .
+          docker build --tag ${{vars.DOCKER_REGISTRY_UA_REPO}}:${{github.sha}} --file "deploy/unified-agent/Dockerfile" .
       - name: Login to Container Registry
         id: login-cr
         uses: yc-actions/yc-cr-login@v1
@@ -34,17 +34,19 @@ jobs:
       - name: Push Docker images to registry
         run: |
           docker push ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}}
-          docker push ${{vars.DOCKER_REGISTRY_UA_REPO}}:latest
+          docker push ${{vars.DOCKER_REGISTRY_UA_REPO}}:${{github.sha}}
       - name: Add latest tag
         if: github.ref == 'refs/heads/main'
-        run: docker tag ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}} ${{vars.DOCKER_REGISTRY_REPO}}:latest && docker push ${{vars.DOCKER_REGISTRY_REPO}}:latest
+        run: |
+          docker tag ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}} ${{vars.DOCKER_REGISTRY_REPO}}:latest && docker push ${{vars.DOCKER_REGISTRY_REPO}}:latest
+          docker tag ${{vars.DOCKER_REGISTRY_UA_REPO}}:${{github.sha}} ${{vars.DOCKER_REGISTRY_UA_REPO}}:latest && docker push ${{vars.DOCKER_REGISTRY_UA_REPO}}:latest
       - name: Read deploy metadata files
         id: configs
         env:
           YC_VM_USERNAME: ${{ vars.YC_VM_USERNAME }}
           YC_VM_SSH: ${{ secrets.YC_VM_SSH }}
           IMAGE: ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}}
-          UA_IMAGE: ${{vars.DOCKER_REGISTRY_UA_REPO}}:latest
+          UA_IMAGE: ${{vars.DOCKER_REGISTRY_UA_REPO}}:${{github.sha}}
           FOLDER_ID: ${{vars.YC_FOLDER_ID}}
         run: |
           sed -i "s/\${YC_VM_USERNAME}/$YC_VM_USERNAME/g" deploy/user-data.yaml

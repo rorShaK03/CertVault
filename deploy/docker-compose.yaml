@@ -12,6 +12,7 @@ services:
     image: cr.yandex/yc/unified-agent
     ports:
       - "16241:16241"
+    uts: host
     volumes:
       - /proc:/ua_proc
     environment:

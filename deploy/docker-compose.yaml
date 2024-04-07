@@ -8,8 +8,12 @@ services:
       - "8080:8080"
       - "443:443"
     restart: always
-    networks:
-      - spring-cloud-network
-networks:
-  spring-cloud-network:
-    driver: bridge
+  unified-agent:
+    image: cr.yandex/yc/unified-agent
+    ports:
+      - "16241:16241"
+    volumes:
+      - /proc:/ua_proc
+    environment:
+      - PROC_DIRECTORY=/ua_proc
+      - FOLDER_ID=${FOLDER_ID}

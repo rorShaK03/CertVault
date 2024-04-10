@@ -78,7 +78,7 @@ resource "yandex_compute_instance_group" "ig-with-coi" {
   deploy_policy {
     max_unavailable = 1
     max_creating = 2
-    max_expansion = 2
+    max_expansion = 0
     max_deleting = 1
   }
   service_account_id = var.ig_deploy_sa_id

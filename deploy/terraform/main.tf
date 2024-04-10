@@ -146,13 +146,24 @@ resource "yandex_lb_target_group" "backend-target-group" {
   depends_on = [
     yandex_compute_instance_group.ig-with-coi
   ]
-  name      = "backend-target-group"
+  name = "backend-target-group"
   dynamic "target" {
     for_each = yandex_compute_instance_group.ig-with-coi.instances
     iterator = instance
     content {
       subnet_id = instance.value.network_interface.0.subnet_id
-      address = instance.value.network_interface.0.ip_address
+      address   = instance.value.network_interface.0.ip_address
     }
+  }
+}
+
+resource "yandex_lb_network_load_balancer" "certvault-nlb" {
+  name = "certvault-nlb"
+  listener {
+    name = "certvault-nlb-listener"
+    port = 8080
+  }
+  attached_target_group {
+    target_group_id = yandex_lb_target_group.backend-target-group.id
   }
 }

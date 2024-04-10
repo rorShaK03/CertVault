@@ -165,5 +165,12 @@ resource "yandex_lb_network_load_balancer" "certvault-nlb" {
   }
   attached_target_group {
     target_group_id = yandex_lb_target_group.backend-target-group.id
+    healthcheck {
+      name = "certvault-api-healthcheck"
+      http_options {
+        port = 8080
+        path = "/api/v1/status"
+      }
+    }
   }
 }

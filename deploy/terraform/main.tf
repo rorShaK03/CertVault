@@ -143,6 +143,9 @@ resource "yandex_lockbox_secret_version" "last_version" {
 }
 
 resource "yandex_lb_target_group" "backend-target-group" {
+  depends_on = [
+    yandex_compute_instance_group.ig-with-coi
+  ]
   name      = "backend-target-group"
   dynamic "target" {
     for_each = yandex_compute_instance_group.ig-with-coi.instances

@@ -40,18 +40,6 @@ jobs:
         run: |
           docker tag ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}} ${{vars.DOCKER_REGISTRY_REPO}}:latest && docker push ${{vars.DOCKER_REGISTRY_REPO}}:latest
           docker tag ${{vars.DOCKER_REGISTRY_UA_REPO}}:${{github.sha}} ${{vars.DOCKER_REGISTRY_UA_REPO}}:latest && docker push ${{vars.DOCKER_REGISTRY_UA_REPO}}:latest
-      - name: Login to Container Registry in k8s-env
-        id: login-cr
-        uses: yc-actions/yc-cr-login@v1
-        with:
-          yc-sa-json-credentials: ${{ secrets.YC_K8S_SA_JSON_CREDENTIALS }}
-      - name: Push Docker images to registry
-        run: |
-          docker push ${{vars.DOCKER_REGISTRY_REPO_K8S}}:${{github.sha}}
-      - name: Add latest tag
-        if: github.ref == 'refs/heads/main'
-        run: |
-          docker tag ${{vars.DOCKER_REGISTRY_REPO_K8S}}:${{github.sha}} ${{vars.DOCKER_REGISTRY_REPO_K8S}}:latest && docker push ${{vars.DOCKER_REGISTRY_REPO_K8S}}:latest
       - name: Read deploy metadata files
         id: configs
         env:

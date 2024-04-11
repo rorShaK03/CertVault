@@ -23,7 +23,7 @@ routes:
   - input:
       plugin: metrics_pull
       config:
-        url: http://<публичный_адрес_ВМ>:8000/metrics
+        url: http://127.0.0.1:8080/actuator/prometheus
         format:
           prometheus: { }
         namespace: app

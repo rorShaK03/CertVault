@@ -24,12 +24,12 @@ jobs:
         run: mvn clean package spring-boot:repackage
       - name: Build Docker images
         run: |
-          docker build --tag ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}} --file "deploy/Dockerfile" .
+          docker build --tag ${{vars.DOCKER_REGISTRY_REPO_K8S}}:${{github.sha}} --file "deploy/Dockerfile" .
       - name: Login to Container Registry in k8s-env
         id: login-cr
         uses: yc-actions/yc-cr-login@v1
         with:
-          yc-sa-json-credentials: ${{ secrets.YC_K8S_SA_JSON_CREDENTIALS }}
+          yc-sa-json-credentials: ${{ secrets.YC_SA_K8S_JSON_CREDENTIALS }}
       - name: Push Docker images to registry
         run: |
           docker push ${{vars.DOCKER_REGISTRY_REPO_K8S}}:${{github.sha}}

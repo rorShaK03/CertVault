@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: certvault-app-deployment
-          image: cr.yandex/crpbqprflma7cocaik4p/cert-vault:d4e937f90a5ace94a7254ab2d7317563dd1f9056
+          image: cr.yandex/crpsk48ocfqquoto4qeo/cert-vault:bacaa877b65073a132efc3a14c5b83bca0787881
           resources:
             requests:
               cpu: "100m"

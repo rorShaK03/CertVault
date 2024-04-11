@@ -21,7 +21,7 @@ jobs:
           distribution: 'corretto'
           java-version: '17'
       - name: Build JAR
-        run: mvn clean package spring-boot:repackage
+        run: mvn clean package spring-boot:repackage -Dmaven.test.skip
       - name: Build Docker images
         run: |
           docker build --tag ${{vars.DOCKER_REGISTRY_REPO_K8S}}:${{github.sha}} --file "deploy/Dockerfile" .

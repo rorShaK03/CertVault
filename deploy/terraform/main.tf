@@ -126,6 +126,11 @@ resource "random_password" "postgres_password" {
   special = false
 }
 
+resource "random_password" "encryption_key" {
+  length = 64
+  special = false
+}
+
 resource "yandex_lockbox_secret" "my_secret" {
   name = "CertVault"
 }
@@ -139,6 +144,10 @@ resource "yandex_lockbox_secret_version" "last_version" {
   entries {
     key        = "POSTGRES_PASSWORD"
     text_value = random_password.postgres_password.result
+  }
+  entries {
+    key        = "ENCRYPTION_KEY"
+    text_value = random_password.encryption_key.result
   }
 }
 

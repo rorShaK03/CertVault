@@ -7,25 +7,25 @@ import lombok.Setter;
 
 import java.util.UUID;
 
+@Getter
 @Entity
+@Table(name = "_certificates")
 @NoArgsConstructor
-public abstract class Secret {
+public class Certificate implements Versionable{
+    @Setter
     @Column(name = "id")
-    @Getter
     protected UUID id;
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "version_id")
-    @Getter
     protected UUID versionId;
 
     @Column(name = "secret")
-    @Getter
     @Setter
     protected String secret;
 
-    public Secret(String secret) {
+    public Certificate(String secret) {
         this.secret = secret;
         this.id = UUID.randomUUID();
     }

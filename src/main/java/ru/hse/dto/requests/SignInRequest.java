@@ -1,4 +1,4 @@
-package ru.hse.dao.responses;
+package ru.hse.dto.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,8 +7,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class StatusResponse {
-    String status;
+@AllArgsConstructor
+public class SignInRequest {
+    private String login;
+    private String password;
 }

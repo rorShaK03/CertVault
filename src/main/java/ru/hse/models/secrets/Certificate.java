@@ -12,6 +12,7 @@ import java.util.UUID;
 @Table(name = "_certificates")
 @NoArgsConstructor
 public class Certificate implements Versionable{
+    @Setter
     @Column(name = "id")
     protected UUID id;
 

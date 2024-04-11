@@ -82,6 +82,7 @@ public class CertificateServiceImpl implements CertificateService {
         Right right = rightRepository.findByUserIdAndSecretId(userId, secretId);
         if (right != null && (right.getRole() == Role.EDITOR || right.getRole() == Role.ADMIN)) {
             Certificate cert = new Certificate(encrypter.encrypt(secret));
+            cert.setId(secretId);
             certificateRepository.save(cert);
             return cert.getVersionId();
         } else {

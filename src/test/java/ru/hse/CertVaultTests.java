@@ -10,9 +10,4 @@ public class CertVaultTests {
     @Test
     public void contextLoads() {
     }
-
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
 }

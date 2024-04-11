@@ -79,6 +79,7 @@ public class KeyServiceImpl implements KeyService {
         Right right = rightRepository.findByUserIdAndSecretId(userId, secretId);
         if (right != null && (right.getRole() == Role.EDITOR || right.getRole() == Role.ADMIN)) {
             Key key = new Key(encrypter.encrypt(secret));
+            key.setId(secretId);
             keyRepository.save(key);
             return key.getVersionId();
         } else {

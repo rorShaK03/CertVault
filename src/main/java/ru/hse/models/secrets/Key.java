@@ -12,6 +12,7 @@ import java.util.UUID;
 @Table(name = "_keys")
 @NoArgsConstructor
 public class Key implements Versionable{
+    @Setter
     @Column(name = "id")
     protected UUID id;
 

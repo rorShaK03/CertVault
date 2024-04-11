@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.UUID;
 
@@ -25,6 +26,7 @@ public class Right {
     private UUID secretId;
 
     @Getter
+    @Setter
     @Enumerated(EnumType.STRING)
     private Role role;
 

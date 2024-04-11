@@ -17,7 +17,13 @@ public class RightServiceImpl implements RightService {
     public void updateRight(UUID curUserId, UUID secretId, UUID userId, Role role) {
         Right right = rightRepository.findByUserIdAndSecretId(curUserId, secretId);
         if (right != null && right.getRole() == Role.ADMIN) {
-            rightRepository.save(new Right(userId, secretId, role));
+            Right newRight = rightRepository.findByUserIdAndSecretId(userId, secretId);
+            if (newRight != null) {
+                newRight.setRole(role);
+            } else {
+                newRight = new Right(userId, secretId, role);
+            }
+            rightRepository.save(newRight);
         } else {
             throw new IllegalArgumentException("Have no enough rights to add new right");
         }

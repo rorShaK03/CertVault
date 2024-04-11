@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: certvault-deployment
+  labels:
+    app: certvault-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: certvault-app
+  template:
+    metadata:
+      labels:
+        app: certvault-app
+    spec:
+      containers:
+        - name: certvault-app-deployment
+          image: cr.yandex/crpbqprflma7cocaik4p/cert-vault:d4e937f90a5ace94a7254ab2d7317563dd1f9056
+          resources:
+            requests:
+              cpu: "100m"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000

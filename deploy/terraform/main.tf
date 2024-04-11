@@ -49,8 +49,8 @@ resource "yandex_compute_instance_group" "ig-with-coi" {
     service_account_id = var.app_instance_sa_id
     platform_id = "standard-v3"
     resources {
-      memory = 2
-      cores  = 2
+      memory = 4
+      cores  = 4
     }
     boot_disk {
       mode = "READ_WRITE"

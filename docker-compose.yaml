@@ -6,7 +6,20 @@ services:
       POSTGRES_PASSWORD: qwerty
       POSTGRES_USER: admin
     ports:
-      - '5432:5432'
+      - '5433:5432'
     volumes:
       - type: tmpfs
         target: /var/lib/postgresql/data
+
+  prometheus:
+    image: 'prom/prometheus:latest'
+    ports:
+      - '9090:9090'
+    volumes:
+      - './prometheus.yml:/etc/prometheus/prometheus.yml'
+
+  grafana:
+      image: grafana/grafana:latest
+      ports:
+        - '3000:3000'
+

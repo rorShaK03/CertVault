@@ -1,0 +1,88 @@
+name: Deployment to Yandex Cloud
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v3
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '17'
+      - name: Build JAR
+        run: mvn clean package spring-boot:repackage
+      - name: Build Docker images
+        run: |
+          docker build --tag ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}} --file "deploy/Dockerfile" .
+          docker build --tag ${{vars.DOCKER_REGISTRY_UA_REPO}}:${{github.sha}} --file "deploy/unified-agent/Dockerfile" .
+      - name: Login to Container Registry
+        id: login-cr
+        uses: yc-actions/yc-cr-login@v1
+        with:
+          yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}    
+      - name: Push Docker images to registry
+        run: |
+          docker push ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}}
+          docker push ${{vars.DOCKER_REGISTRY_UA_REPO}}:${{github.sha}}
+      - name: Add latest tag
+        if: github.ref == 'refs/heads/main'
+        run: |
+          docker tag ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}} ${{vars.DOCKER_REGISTRY_REPO}}:latest && docker push ${{vars.DOCKER_REGISTRY_REPO}}:latest
+          docker tag ${{vars.DOCKER_REGISTRY_UA_REPO}}:${{github.sha}} ${{vars.DOCKER_REGISTRY_UA_REPO}}:latest && docker push ${{vars.DOCKER_REGISTRY_UA_REPO}}:latest
+      - name: Read deploy metadata files
+        id: configs
+        env:
+          YC_VM_USERNAME: ${{ vars.YC_VM_USERNAME }}
+          YC_VM_SSH: ${{ secrets.YC_VM_SSH }}
+          IMAGE: ${{vars.DOCKER_REGISTRY_REPO}}:${{github.sha}}
+          UA_IMAGE: ${{vars.DOCKER_REGISTRY_UA_REPO}}:${{github.sha}}
+          FOLDER_ID: ${{vars.YC_FOLDER_ID}}
+        run: |
+          sed -i "s/\${YC_VM_USERNAME}/$YC_VM_USERNAME/g" deploy/user-data.yaml
+          sed -i "s/\${YC_VM_SSH}/$YC_VM_SSH/g" deploy/user-data.yaml
+          sed -i "s|\${IMAGE}|$IMAGE|g" deploy/docker-compose.yaml
+          sed -i "s|\${UA_IMAGE}|$UA_IMAGE|g" deploy/docker-compose.yaml
+          sed -i "s|\${FOLDER_ID}|$FOLDER_ID|g" deploy/docker-compose.yaml
+          {
+            echo "userdata<<EOF"
+            echo "$(cat deploy/user-data.yaml)"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
+          {
+            echo "compose<<EOF"
+            echo "$(cat deploy/docker-compose.yaml)"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
+      - name: terraform apply
+        uses: dflook/terraform-apply@v1
+        env:
+          TERRAFORM_PRE_RUN: |
+            exec 1<&-
+            exec 2<&-
+            echo '${{secrets.YC_SA_JSON_CREDENTIALS}}' > /key.json
+            echo '${{steps.configs.outputs.userdata}}' > /user-data.yaml
+            echo '${{steps.configs.outputs.compose}}' > /docker-compose.yaml
+        with:
+          path: deploy/terraform
+          label: production
+          auto_approve: true
+          variables: |
+            cloud_id = "${{vars.YC_CLOUD_ID}}"
+            folder_id = "${{vars.YC_FOLDER_ID}}"
+            app_instance_sa_id = "${{vars.YC_INSTANCE_SA_ID}}"
+            ig_deploy_sa_id = "${{vars.YC_IG_SA_ID}}"
+          backend_config: |
+            access_key=${{secrets.YC_SA_STATIC_KEY_ID}}
+            secret_key=${{secrets.YC_SA_STATIC_KEY_SECRET}}
+        

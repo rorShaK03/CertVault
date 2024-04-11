@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+  cert-vault:
+    image: ${IMAGE}
+    ports:
+      - "80:80"
+      - "8080:8080"
+      - "443:443"
+    restart: always
+  unified-agent:
+    image: ${UA_IMAGE}
+    ports:
+      - "16241:16241"
+    uts: host
+    volumes:
+      - /proc:/ua_proc
+    environment:
+      - PROC_DIRECTORY=/ua_proc
+      - FOLDER_ID=${FOLDER_ID}
+    restart: always

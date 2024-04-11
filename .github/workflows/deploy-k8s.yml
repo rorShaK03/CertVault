@@ -1,0 +1,39 @@
+name: Deployment to K8S
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v3
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '17'
+      - name: Build JAR
+        run: mvn clean package spring-boot:repackage
+      - name: Build Docker images
+        run: |
+          docker build --tag ${{vars.DOCKER_REGISTRY_REPO_K8S}}:${{github.sha}} --file "deploy/Dockerfile" .
+      - name: Login to Container Registry in k8s-env
+        id: login-cr
+        uses: yc-actions/yc-cr-login@v1
+        with:
+          yc-sa-json-credentials: ${{ secrets.YC_SA_K8S_JSON_CREDENTIALS }}
+      - name: Push Docker images to registry
+        run: |
+          docker push ${{vars.DOCKER_REGISTRY_REPO_K8S}}:${{github.sha}}
+      - name: Add latest tag
+        if: github.ref == 'refs/heads/main'
+        run: |
+          docker tag ${{vars.DOCKER_REGISTRY_REPO_K8S}}:${{github.sha}} ${{vars.DOCKER_REGISTRY_REPO_K8S}}:latest && docker push ${{vars.DOCKER_REGISTRY_REPO_K8S}}:latest

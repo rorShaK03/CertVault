@@ -18,6 +18,21 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <version>1.12.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
             <version>10.9.1</version>
@@ -148,13 +163,6 @@
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>10.9.1</version>
-                <configuration>
-                    <user>admin</user>
-                    <password>qwerty</password>
-                    <schemas>
-                        <schema>public</schema>
-                    </schemas>
-                </configuration>
             </plugin>
             <plugin>
                 <!-- Build an executable JAR -->
@@ -165,7 +173,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>ru.hse.Main</mainClass>
+                            <mainClass>ru.hse.CertVault</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

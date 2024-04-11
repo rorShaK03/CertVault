@@ -22,7 +22,7 @@ public class RightController {
     @PostMapping
     public ResponseEntity<CreateRightResponse> createRight(@AuthenticationPrincipal User user,
                                                            @RequestBody CreateRightRequest createRightRequest) {
-        rightService.updateRight(user.getId(), createRightRequest.getUserId(), createRightRequest.getSecretId(),
+        rightService.updateRight(user.getId(), createRightRequest.getSecretId(), createRightRequest.getUserId(),
                 createRightRequest.getRole());
         return new ResponseEntity<CreateRightResponse>(new CreateRightResponse("Right was successfully created"), HttpStatus.OK);
     }
@@ -30,7 +30,7 @@ public class RightController {
     @PostMapping("/update")
     public ResponseEntity<CreateRightResponse> updateRight(@AuthenticationPrincipal User user,
                                                            @RequestBody CreateRightRequest createRightRequest) {
-        rightService.updateRight(user.getId(), createRightRequest.getUserId(), createRightRequest.getSecretId(),
+        rightService.updateRight(user.getId(), createRightRequest.getSecretId(), createRightRequest.getUserId(),
                 createRightRequest.getRole());
         return new ResponseEntity<CreateRightResponse>(new CreateRightResponse("Right was successfully updated"), HttpStatus.OK);
     }

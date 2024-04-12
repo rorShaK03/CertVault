@@ -3,15 +3,17 @@ package ru.hse.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import ru.hse.dao.requests.UploadSecretRequest;
-import ru.hse.dao.responses.SecretVersionsResponse;
+import ru.hse.dto.requests.UploadSecretRequest;
+import ru.hse.dto.responses.SecretVersionsResponse;
 import ru.hse.errors.NotFoundError;
-import ru.hse.models.secrets.types.Key;
-import ru.hse.services.impl.KeyService;
+import ru.hse.models.Role;
+import ru.hse.models.User;
+import ru.hse.models.secrets.Key;
+import ru.hse.services.KeyService;
 
-import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -20,31 +22,39 @@ import java.util.UUID;
 public class KeyController {
     private final KeyService keyService;
     @PostMapping
-    public ResponseEntity<UUID> uploadNewKey(UploadSecretRequest body) {
+    public ResponseEntity<UUID> uploadNewKey(@AuthenticationPrincipal User user, @RequestBody UploadSecretRequest body) {
         // Returns version_id
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(keyService.addSecret(body.getSecret()));
+                .body(keyService.addSecret(body.getSecret(), user.getId()));
     }
 
     // Получить секрет можно только по version_id
     @GetMapping("/{versionId}")
-    public ResponseEntity<Key> getKey(@PathVariable UUID versionId) {
-        return ResponseEntity.ok(keyService.findSecretByVersionId(versionId));
+    public ResponseEntity<Key> getKey(@AuthenticationPrincipal User user, @PathVariable("versionId") UUID versionId) {
+        return ResponseEntity.ok(keyService.findKeyByVersionId(versionId, user.getId()));
     }
 
     // Удаляются сразу все версии секрета по secretId
     @PostMapping("/remove/{secretId}")
-    public ResponseEntity<UUID> removeCert(@PathVariable UUID secretId) {
+    public ResponseEntity<UUID> removeCert(@AuthenticationPrincipal User user, @PathVariable("secretId") UUID secretId) {
         // Returns secret_id
-        keyService.removeAllById(secretId);
+        keyService.removeAllById(secretId, user.getId());
         return ResponseEntity.ok(secretId);
+    }
+
+    @PostMapping("/update/{secretId}")
+    public ResponseEntity<UUID> updateCert(@AuthenticationPrincipal User user, @PathVariable("secretId") UUID secretId,
+                                           @RequestBody UploadSecretRequest body) {
+        // Returns version_id
+        return new ResponseEntity<UUID>(keyService.updateKey(secretId, body.getSecret(), user.getId()), HttpStatus.OK);
     }
 
     // Можно получить список version_id всех версий по secret_id
     @GetMapping("/versions/{secretId}")
-    public ResponseEntity<SecretVersionsResponse> getKeyVersions(@PathVariable UUID secretId) {
-        return ResponseEntity.ok(new SecretVersionsResponse(keyService.getAllSecretsById(secretId)));
+    public ResponseEntity<SecretVersionsResponse> getKeyVersions(@AuthenticationPrincipal User user,
+                                                                 @PathVariable("secretId") UUID secretId) {
+        return ResponseEntity.ok(new SecretVersionsResponse(keyService.getAllKeysById(secretId, user.getId())));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

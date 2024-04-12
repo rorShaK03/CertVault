@@ -25,7 +25,7 @@ routes:
       config:
         url: http://172.17.0.1:8080/actuator/prometheus
         format:
-          prometheus: { }
+          prometheus: {}
         namespace: app
       channel:
         channel_ref:
